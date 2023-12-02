@@ -92,20 +92,20 @@ ax.plot(control_points_X, control_points_Y, control_points_Z, label='Полиг�
 ax.set_proj_type('ortho')
 ax.view_init(elev=30, azim=45)
 ax.set_box_aspect([1, 1, 1])
+ax.disable_mouse_rotation()
 
 SetScale(ax, control_points_X, control_points_Y, control_points_Z)
-
-# Disable mouse rotation
-ax.disable_mouse_rotation()
 
 for _ in range(NUMBER_OF_SEGMENTS):
     B_spline.append([])
 
+# Рассчет B-сплайна
 i = 0
 while i <= 1:
     r(i)
     i += STEP
 
+# Создание массивов с координатами для B-сплайна
 B_spline_X = []
 B_spline_Y = []
 B_spline_Z = []
@@ -120,15 +120,18 @@ B_spline_X = np.array(B_spline_X)
 B_spline_Y = np.array(B_spline_Y)
 B_spline_Z = np.array(B_spline_Z)
 
+# Построение B-сплайна
 ax.plot(B_spline_X, B_spline_Y, B_spline_Z, label='B-сплайн', linewidth=2.5)
 
 # Создание поверхности вращение на 100 относительно оси X
 surface_of_revolution = []
 surface_of_revolution.append([B_spline_X, B_spline_Y, B_spline_Z])
 
+# Рассчет сплайнов для поверхности вращения
 for angle in range(0, 100):
     surface_of_revolution.append([B_spline_X, B_spline_Y * cos(radians(angle)), B_spline_Y * sin(radians(angle))])
 
+# Построение поверхности вращения
 for i in range(len(surface_of_revolution)-1):
     ax.plot_surface(np.array([surface_of_revolution[i][0], surface_of_revolution[i+1][0]]),
                     np.array([surface_of_revolution[i][1], surface_of_revolution[i+1][1]]),
